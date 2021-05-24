@@ -1,5 +1,6 @@
 ## (1) 請問下列程式執行後的結果為何？為什麼？
 
+```javascript
 console.log("start");
 
 (function () {
@@ -10,6 +11,7 @@ console.log("start");
 })();
 
 console.log("end");
+```
 
 ### Ans: 
     start
@@ -24,6 +26,7 @@ console.log("end");
     
 ## (2) 請問下列程式執行的結果為何？為什麼？
 
+```javascript
 console.log("start");
 
 (function () {
@@ -34,6 +37,7 @@ console.log("start");
 })();
 
 console.log("end");
+```
 
 ### Ans:
     start
@@ -48,6 +52,7 @@ console.log("end");
 
 ## (3) 請問下列程式執行的結果為何？為什麼？
 
+```javascript
 const bar = () => console.log("bar");
 
 const baz = () => console.log("baz");
@@ -59,6 +64,7 @@ const foo = () => {
 };
 
 foo();
+```
 
 ### Ans:
     foo
@@ -71,6 +77,7 @@ foo();
 
 ## (4) 請問下列程式執行的結果為何？為什麼？
 
+```javascript
 const bar = () => console.log("bar");
 
 const baz = () => console.log("baz");
@@ -82,6 +89,7 @@ const foo = () => {
 };
 
 foo();
+```
 
 ### Ans:
     foo

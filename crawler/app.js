@@ -23,21 +23,22 @@ function readFilePromise () {
 };
 readFilePromise()
     .then((result) => {
-        console.log(result);
-        axios({
+        // console.log(result);
+        return axios({
             method: 'get',
             url: 'https://www.twse.com.tw/exchangeReport/STOCK_DAY?',
             params: {
                 date: 20210529,
                 stockNo: result
             }
-        }).then(function (response){
-            console.log(response.data.title)
         })
     })
-    .catch((err) => {
+    .then(function (response){
+        console.log(response.data.title)
+    }).catch((err) => {
         console.log(err)
     })
+
 // npm i axios
 // 引入 axios
 

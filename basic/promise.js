@@ -27,7 +27,7 @@ doWorkPromise("刷牙", 2000, true)
     })
     .then((result) => {
         console.log(result);
-        return doWorkPromise("寫功課", 3000,false)
+        return doWorkPromise("寫功課", 3000, true)
     })
     .then((result) => {
         console.log(result);

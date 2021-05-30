@@ -11,6 +11,12 @@ const fs = require("fs");
 //     console.log(`讀到的 stock code: ${data}`)
 // })
 
+let dt = new Date();
+// dt.toISOString().slice(0,10);
+let formatDate = dt.toISOString().slice(0,10).replace("-","").replace("-","");
+
+// 也可以使用moment js
+
 function readFilePromise () {
     return new Promise((resolve, reject) => {
         fs.readFile("stock.txt", "utf8", (err, data) => {
@@ -28,13 +34,16 @@ readFilePromise()
             method: 'get',
             url: 'https://www.twse.com.tw/exchangeReport/STOCK_DAY?',
             params: {
-                date: 20210529,
+                date: formatDate,
                 stockNo: result
             }
         })
     })
     .then(function (response){
-        console.log(response.data.title)
+        if(response.data.stat === "OK"){
+            console.log(response.data.date);
+            console.log(response.data.title);
+        }
     }).catch((err) => {
         console.log(err)
     })

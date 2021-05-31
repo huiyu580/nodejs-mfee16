@@ -1,16 +1,6 @@
 const axios = require("axios");
 
-// TODO: 從 stock.txt 讀股票代碼進來
-// filesystem
-// npm i fs ??? -> 不用
 const fs = require("fs");
-// fs.readFile("stock.txt", "utf8", (err, data) => {
-//     if (err) {
-//         return console.error("讀檔錯誤", err);
-//     }
-//     console.log(`讀到的 stock code: ${data}`)
-// })
-
 let dt = new Date();
 // dt.toISOString().slice(0,10);
 let formatDate = dt.toISOString().slice(0,10).replace("-","").replace("-","");

@@ -1,21 +1,14 @@
 const axios = require("axios");
-
-// TODO: 從 stock.txt 讀股票代碼進來
-// filesystem
-// npm i fs ??? -> 不用
 const fs = require("fs");
-// fs.readFile("stock.txt", "utf8", (err, data) => {
-//     if (err) {
-//         return console.error("讀檔錯誤", err);
-//     }
-//     console.log(`讀到的 stock code: ${data}`)
-// })
 
-let dt = new Date();
-// dt.toISOString().slice(0,10);
-let formatDate = dt.toISOString().slice(0,10).replace("-","").replace("-","");
 
-// 也可以使用moment js
+// JS 處理時間
+// let dt = new Date();
+// let formatDate = dt.toISOString().slice(0,10).replace("-","").replace("-","");
+
+// moment js
+let moment = require('moment');
+// console.log(moment().format('YYYYMMDD'));
 
 function readFilePromise () {
     return new Promise((resolve, reject) => {
@@ -29,21 +22,25 @@ function readFilePromise () {
 };
 readFilePromise()
     .then((result) => {
-        // console.log(result);
+        // axios 是一個promise 當他return時，代表又丟了一個promise出去，所以外面可以再接一個then
         return axios({
             method: 'get',
             url: 'https://www.twse.com.tw/exchangeReport/STOCK_DAY?',
             params: {
-                date: formatDate,
+                date: moment().format('YYYYMMDD'),
                 stockNo: result
             }
+
         })
     })
+    // 這個then接的是axios這個promise的結果
     .then(function (response){
         if(response.data.stat === "OK"){
             console.log(response.data.date);
             console.log(response.data.title);
         }
+    // 任何一個promise發生錯誤 readFilePromise 和 axios的錯誤都會被catch接住
+
     }).catch((err) => {
         console.log(err)
     })

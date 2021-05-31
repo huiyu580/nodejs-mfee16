@@ -1,11 +1,15 @@
 const axios = require("axios");
 
 const fs = require("fs");
-let dt = new Date();
-// dt.toISOString().slice(0,10);
-let formatDate = dt.toISOString().slice(0,10).replace("-","").replace("-","");
 
-// 也可以使用moment js
+// js 取得日期
+// let dt = new Date();
+// dt.toISOString().slice(0,10);
+// let formatDate = dt.toISOString().slice(0,10).replace("-","").replace("-","");
+
+// moment js
+let moment = require('moment');
+
 
 function readFilePromise () {
     return new Promise((resolve, reject) => {
@@ -24,7 +28,7 @@ function readFilePromise () {
         method: 'get',
         url: 'https://www.twse.com.tw/exchangeReport/STOCK_DAY?',
         params: {
-            date: formatDate,
+            date: moment().format('YYYYMMDD'),
             stockNo: stockCode
         }
     })

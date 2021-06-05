@@ -3,58 +3,50 @@ const fs = require("fs");
 let moment = require('moment');
 
 const Promise = require('bluebird');
-const readFile = Promise.promisifyAll(fs);
-console.log(readFile);
+const fsBlue = Promise.promisifyAll(fs);
 
-// function readFilePromise () {
-//     return new Promise((resolve, reject) => {
-//         fs.readFile("stock.txt", "utf8", (err, data) => {
-//             if (err) {
-//                 reject(err)
-//             }
-//             resolve(data)
-//         })
-//     })
-// };
-// readFilePromise()
-//     .then((result) => {
-//         // axios 是一個promise 當他return時，代表又丟了一個promise出去，所以外面可以再接一個then
-//         return axios({
-//             method: 'get',
-//             url: 'https://www.twse.com.tw/exchangeReport/STOCK_DAY?',
-//             params: {
-//                 date: moment().format('YYYYMMDD'),
-//                 stockNo: result
-//             }
+const mysql = require('mysql');
+let connection = mysql.createConnection({
+    host     : 'localhost',
+    user     : 'root',
+    password : '',
+    database : 'stock'
+});
+connection = Promise.promisifyAll(connection);
 
-//         })
-//     })
-//     // 這個then接的是axios這個promise的結果
-//     .then(function (response){
-//         if(response.data.stat === "OK"){
-//             console.log(response.data.date);
-//             console.log(response.data.title);
-//         }
-//     // 任何一個promise發生錯誤 readFilePromise 和 axios的錯誤都會被catch接住
+(async function(){
+    // 讀 stock.txt 中的 stock Code
+    let stockCode = await fsBlue.readFileAsync("stock.txt", "utf-8");
 
-//     }).catch((err) => {
-//         console.log(err)
-//     })
+    try{
+        await connection.connectAsync();
 
-// npm i axios
-// 引入 axios
+        // 查詢資料庫中是否有該筆資料
+        let ifExist = await connection.queryAsync(`SELECT stock_id FROM stock WHERE stock_id='${stockCode}'`)
+        if(ifExist.length == 0){
+            let result = await axios.get(`https://www.twse.com.tw/zh/api/codeQuery?query=${stockCode}`)
+            
+            // 判斷是否抓的到該筆資料
+            if(result.data.suggestions.length <= 1){
+                throw "查無資料";
+            }else{
+                let companyName = "";
+                result.data.suggestions.forEach(item => {
+                    let newItem = item.split('\t')
+                    if(newItem[0] == stockCode){
+                        companyName = newItem[1];
+                    }
+                })
+                await connection.queryAsync(`INSERT INTO stock(stock_id, stock_name) VALUES('${stockCode}','${companyName}')`)
+                console.log("成功加入資料庫")
+            }
+        }else{
+            throw "該筆資料已存在";
+        }
+    }catch(err){
+        console.error(err)
+    }finally{
+        connection.end();
+    }
 
-
-
-
-
-// axios({
-//     method: 'get',
-//     url: 'https://www.twse.com.tw/exchangeReport/STOCK_DAY?',
-//     params: {
-//         date: 20210529,
-//         stockNo: 2330
-//     }
-// }).then(function (response){
-//     console.log(response.data.title)
-// })
+})();

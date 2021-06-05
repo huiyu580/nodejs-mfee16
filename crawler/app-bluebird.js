@@ -5,9 +5,16 @@ let moment = require('moment');
 //覆蓋掉原生的promise
 const Promise = require("bluebird");
 // console.log(Promise)
-const readFileBlue = Promise.promisify(fs.readFile)
 
-readFileBlue("stock.txt", "utf-8")
+// 一次包一個
+// const readFileBlue = Promise.promisify(fs.readFile)
+
+// 一次包全部
+const fsBlue = Promise.promisifyAll(fs);
+
+fsBlue
+    .readFileAsync("stock.txt", "utf-8")
+    // readFileBlue("stock.txt", "utf-8") // 一次包一個
     .then((result) => {
         // axios 是一個promise 當他return時，代表又丟了一個promise出去，所以外面可以再接一個then
         return axios({

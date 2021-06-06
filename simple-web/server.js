@@ -10,6 +10,8 @@ const server = http.createServer((req, res) => {
     console.log("有連線進來了")
     console.log(req.url)
 
+    // 將url一般化，移除他的query string，非必要結尾斜線，一律小寫
+
     res.statusCode = 200; //成功
     res.setHeader("Content-Type", "text/plain;charset=UTF-8")
 

@@ -1,16 +1,16 @@
 const axios = require("axios");
 const fs = require("fs");
-let moment = require('moment');
+
 
 const Promise = require('bluebird');
 const fsBlue = Promise.promisifyAll(fs);
-
+require('dotenv').config()
 const mysql = require('mysql');
 let connection = mysql.createConnection({
-    host     : 'localhost',
-    user     : 'root',
-    password : '1234',
-    database : 'stock'
+    host     : process.env.DB_HOST,
+    user     : process.env.DB_USER,
+    password : process.env.DB_PASSWORD,
+    database : process.env.DB_NAME
 });
 connection = Promise.promisifyAll(connection);
 

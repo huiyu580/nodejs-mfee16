@@ -1,6 +1,6 @@
 const axios = require("axios");
 const fs = require("fs");
-
+let moment = require('moment');
 
 const Promise = require('bluebird');
 const fsBlue = Promise.promisifyAll(fs);
@@ -22,7 +22,7 @@ connection = Promise.promisifyAll(connection);
         await connection.connectAsync();
 
         // 查詢資料庫中是否有該筆資料
-        let ifExist = await connection.queryAsync(`SELECT stock_id FROM stock WHERE stock_id='${stockCode}'`)
+        let ifExist = await connection.queryAsync('SELECT stock_id FROM stock WHERE stock_id=?', [stockCode])
         if(ifExist.length == 0){
             let result = await axios.get(`https://www.twse.com.tw/zh/api/codeQuery?query=${stockCode}`)
             
@@ -31,16 +31,26 @@ connection = Promise.promisifyAll(connection);
                 throw "查無資料";
             }
             
-            // 查無資料時已經丟出，不需要再用else
             let companyName = "";
             result.data.suggestions.forEach(item => {
                 let newItem = item.split('\t')
                 if(newItem[0] == stockCode){
                     companyName = newItem[1];
+                    return newItem
                 }
             })
+
+            let response = await axios({
+                method: 'get',
+                url: 'https://www.twse.com.tw/exchangeReport/STOCK_DAY?',
+                params: {
+                    date: moment().format('YYYYMMDD'),
+                    stockNo: stockCode
+                }
+            })
+            console.log(response.data.data)
             // 加入資料庫
-            await connection.queryAsync(`INSERT INTO stock(stock_id, stock_name) VALUES('${stockCode}','${companyName}')`)
+            await connection.queryAsync(`INSERT INTO stock(stock_id, stock_name) VALUES('${stockCode}', '${companyName}')`)
             console.log("成功加入資料庫")
             
         }else{

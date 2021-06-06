@@ -9,7 +9,7 @@ const mysql = require('mysql');
 let connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
-    password : '',
+    password : '1234',
     database : 'stock'
 });
 connection = Promise.promisifyAll(connection);
@@ -27,7 +27,7 @@ connection = Promise.promisifyAll(connection);
             let result = await axios.get(`https://www.twse.com.tw/zh/api/codeQuery?query=${stockCode}`)
             
             // 判斷是否抓的到該筆資料
-            if(result.data.suggestions.length <= 1){
+            if(result.data.suggestions[0] == '(無符合之代碼或名稱)'){
                 throw "查無資料";
             }else{
                 let companyName = "";

@@ -29,17 +29,20 @@ connection = Promise.promisifyAll(connection);
             // 判斷是否抓的到該筆資料
             if(result.data.suggestions[0] == '(無符合之代碼或名稱)'){
                 throw "查無資料";
-            }else{
-                let companyName = "";
-                result.data.suggestions.forEach(item => {
-                    let newItem = item.split('\t')
-                    if(newItem[0] == stockCode){
-                        companyName = newItem[1];
-                    }
-                })
-                await connection.queryAsync(`INSERT INTO stock(stock_id, stock_name) VALUES('${stockCode}','${companyName}')`)
-                console.log("成功加入資料庫")
             }
+            
+            // 查無資料時已經丟出，不需要再用else
+            let companyName = "";
+            result.data.suggestions.forEach(item => {
+                let newItem = item.split('\t')
+                if(newItem[0] == stockCode){
+                    companyName = newItem[1];
+                }
+            })
+            // 加入資料庫
+            await connection.queryAsync(`INSERT INTO stock(stock_id, stock_name) VALUES('${stockCode}','${companyName}')`)
+            console.log("成功加入資料庫")
+            
         }else{
             throw "該筆資料已存在";
         }

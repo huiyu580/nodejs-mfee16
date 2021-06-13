@@ -14,12 +14,19 @@ const server = http.createServer((req, res) => {
     // 將url一般化，移除他的query string，非必要結尾斜線，一律小寫
     const path = req.url.replace(/\/?(?:\?.*)?$/, "").toLocaleLowerCase();
 
+    // 抓到localhost / IP
+    const url = new URL(req.url, `http://${req.headers.host}`)
+    // query string的參數變成物件
+    console.log(url.searchParams);
+    
+
     res.statusCode = 200; //成功
     res.setHeader("Content-Type", "text/plain;charset=UTF-8")
 
     switch(path) {
         case "/":
-            res.end("這是首頁");
+            let name = url.searchParams.get(name)
+            res.end(`hello ${name}，這是首頁`);
             break;
         case "/test":
             res.end("這是測試頁面");

@@ -13,18 +13,26 @@ app.use(function(req, res, next){
     next();
 })
 
-app.use(express.static("public"))
+app.use(express.static("public"));
+
+// 第一個是變數 第二個是檔案夾名稱
+app.set("views", "views")
+
+// 告訴express我們用view engine是pug
+app.set("view engine", "pug")
 
 // 路由
 app.get("/", (req, res) => {
-    res.send("Hello express")
+    res.render("index")
+    // res.send("Hello express")
 });
-app.get("/about", (res, req) => {
-    res.send("About express")
-})
+app.get("/about", (req, res) => {
+    // res.send("About express")
+    res.render("about")
+});
 app.get("/test", (req, res) => {
     res.send("Express test")
-})
+});
 
 app.listen(3001, () => {
     console.log(`我跑起來了`)

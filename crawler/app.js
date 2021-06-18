@@ -52,33 +52,35 @@ connection = Promise.promisifyAll(connection);
             // 加入資料庫
             await connection.queryAsync(`INSERT INTO stock(stock_id, stock_name) VALUES('${stockCode}', '${companyName}')`)
             
-            console.log("成功加入資料庫")
-            let getStocks = await axios.get('https://www.twse.com.tw/exchangeReport/STOCK_DAY',{
-                    params: {
-                        date: moment().format('YYYYMMDD'),
-                        stockNo: stockCode
-                    }    
-                })
-            // console.log(insertStocks.data)
-            // 處理資料
+            throw "成功加入資料庫"
+
             
-            let stocksArr = getStocks.data.data.map(item => {
-                item = item.map((i) => {
-                    return i.replace(/,/g, "")
-                })
-                    item[0] = moment(parseInt(item[0].replace(/\//g,"")) + 19110000, 'YYYYMMDD').format('YYYY-MM-DD')
-                    item.unshift(stockCode)
-                    return item
-                })
-                console.log(stocksArr)
-                // 批次寫入資料庫
-                let insertResult = await connection.queryAsync(
-                    "INSERT IGNORE INTO stock_price (stock_id, date, volume, amount, open_price, high_price, low_price, close_price, delta_price, transactions) VALUES ?", [stocksArr]
-                )
-                console.log(insertResult)
         }else{
-            throw "該筆資料已存在";
+            console.log("該筆資料已存在");
         }
+         // 處理資料 //到這一步表示stock資料庫已經有了或著已建入新的stock_id 跟 stock_name
+        let getStocks = await axios.get('https://www.twse.com.tw/exchangeReport/STOCK_DAY',{
+            params: {
+                date: moment().format('YYYYMMDD'),
+                stockNo: stockCode
+            }    
+        })
+
+            
+        let stocksArr = getStocks.data.data.map(item => {
+            item = item.map((i) => {
+                return i.replace(/,/g, "")
+            })
+                item[0] = moment(parseInt(item[0].replace(/\//g,"")) + 19110000, 'YYYYMMDD').format('YYYY-MM-DD')
+                item.unshift(stockCode)
+                return item
+            })
+            console.log(stocksArr)
+            // 批次寫入資料庫
+            let insertResult = await connection.queryAsync(
+                "INSERT IGNORE INTO stock_price (stock_id, date, volume, amount, open_price, high_price, low_price, close_price, delta_price, transactions) VALUES ?", [stocksArr]
+            )
+            console.log(insertResult)
     }catch(err){
         console.error(err)
     }finally{

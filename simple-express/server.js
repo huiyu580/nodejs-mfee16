@@ -5,7 +5,7 @@ const express = require("express");
 let app = express();
 
 // 用db.js模組連線至資料庫
-let db = require("db.js");
+let db = require("./utils/db.js");
 
 
 // module < package < framework
@@ -35,9 +35,10 @@ app.get("/about", (req, res) => {
     res.render("about")
 });
 app.get("/stock", async (req, res) => {
-    let result = await db.connection.queryAsync;
+    let result = await db.queryAsync('SELECT * FROM stock');
+    console.log(result)
     res.render("stock/list",{
-        stock: result
+        stocks: result
     })
 });
 app.get("/test", (req, res) => {

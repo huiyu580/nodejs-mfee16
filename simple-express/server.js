@@ -4,6 +4,10 @@ const express = require("express");
 // 利用express 建立一個express application app
 let app = express();
 
+// 用db.js模組連線至資料庫
+let db = require("db.js");
+
+
 // module < package < framework
 
 // 使用中間件 middleware處理到router前的其他工作
@@ -29,6 +33,12 @@ app.get("/", (req, res) => {
 app.get("/about", (req, res) => {
     // res.send("About express")
     res.render("about")
+});
+app.get("/stock", async (req, res) => {
+    let result = await db.connection.queryAsync;
+    res.render("stock/list",{
+        stock: result
+    })
 });
 app.get("/test", (req, res) => {
     res.send("Express test")

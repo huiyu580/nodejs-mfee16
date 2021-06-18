@@ -13,6 +13,8 @@ app.use(function(req, res, next){
     next();
 })
 
+app.use(express.static("public"))
+
 // 路由
 app.get("/", (req, res) => {
     res.send("Hello express")

@@ -61,6 +61,7 @@ connection = Promise.promisifyAll(connection);
                 })
             // console.log(insertStocks.data)
             // 處理資料
+            
             let stocksArr = getStocks.data.data.map(item => {
                 item = item.map((i) => {
                     return i.replace(/,/g, "")
@@ -75,7 +76,6 @@ connection = Promise.promisifyAll(connection);
                     "INSERT IGNORE INTO stock_price (stock_id, date, volume, amount, open_price, high_price, low_price, close_price, delta_price, transactions) VALUES ?", [stocksArr]
                 )
                 console.log(insertResult)
-            
         }else{
             throw "該筆資料已存在";
         }

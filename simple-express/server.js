@@ -17,6 +17,11 @@ app.use(function(req, res, next){
     next();
 })
 
+// 通常把router application放在這
+let stockRouter = require('./routes/stock')
+// 告訴程式如果看到/stock 就到stock.js找
+app.use("/stock", stockRouter)
+
 app.use(express.static("public"));
 
 // 第一個是變數 第二個是檔案夾名稱
@@ -34,17 +39,26 @@ app.get("/about", (req, res) => {
     // res.send("About express")
     res.render("about")
 });
-app.get("/stock", async (req, res) => {
-    let result = await db.queryAsync('SELECT * FROM stock');
-    console.log(result)
-    res.render("stock/list",{
-        stocks: result
-    })
-});
+
+// app.get("/stock", async (req, res) => {
+//     let result = await db.queryAsync('SELECT * FROM stock');
+//     res.render("stock/list",{
+//         stocks: result
+//     })
+// });
+// app.get("/stock/:stockCode", async (req, res) => {
+
+//     let priceResult = await db.queryAsync('SELECT * FROM stock_price WHERE stock_id = ? ORDER BY date', [req.params.stockCode]);
+//     res.render("stock/detail",{
+//         stockPrice : priceResult
+//     })
+
+// });
+
 app.get("/test", (req, res) => {
     res.send("Express test")
 });
 
-app.listen(3001, () => {
+app.listen(3000, () => {
     console.log(`我跑起來了`)
 })

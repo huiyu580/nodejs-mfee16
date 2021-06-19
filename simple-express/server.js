@@ -59,6 +59,16 @@ app.get("/test", (req, res) => {
     res.send("Express test")
 });
 
+app.use((req, res, next) => {
+    res.status(404);
+    res.render("404");
+})
+
+// 500 error 放在所有路由最後面 這裡一定要有四個參數 --> 最後的錯誤處理
+app.use((err, req, res, next) => {
+    res.status(500);
+    res.send("500 洽系統管理員")
+})
 app.listen(3000, () => {
     console.log(`我跑起來了`)
 })

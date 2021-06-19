@@ -9,11 +9,14 @@ router.get("/", async (req, res) => {
         stocks: result
     })
 });
-router.get("/:stockCode", async (req, res) => {
+router.get("/:stockCode", async (req, res, next) => {
     let stockArr = await db.queryAsync('SELECT * FROM stock WHERE stock_id = ?', [req.params.stockCode]); 
+    // 看是否有這個名稱
+    if (stockArr.length ==0){
+        next(); // 進入404那個中間件
+    }
     let stockName = stockArr[0].stock_name
     let stockCode = stockArr[0].stock_id
-    console.log(stockCode)
 
     const perPage = 10;
     let totalCountArr = await db.queryAsync('SELECT COUNT(*) as total FROM stock_price WHERE stock_id = ?', [req.params.stockCode]); 

@@ -10,9 +10,10 @@ router.get("/", async (req, res) => {
     })
 });
 router.get("/:stockCode", async (req, res) => {
-    let stockNameArr = await db.queryAsync('SELECT stock_name FROM stock WHERE stock_id = ?', [req.params.stockCode]); 
-    let stockName = stockNameArr[0].stock_name
-    console.log(stockName)
+    let stockArr = await db.queryAsync('SELECT * FROM stock WHERE stock_id = ?', [req.params.stockCode]); 
+    let stockName = stockArr[0].stock_name
+    let stockCode = stockArr[0].stock_id
+    console.log(stockCode)
 
     const perPage = 10;
     let totalCountArr = await db.queryAsync('SELECT COUNT(*) as total FROM stock_price WHERE stock_id = ?', [req.params.stockCode]); 
@@ -26,6 +27,7 @@ router.get("/:stockCode", async (req, res) => {
     res.render("stock/detail",{
         stockPrice : priceResult,
         stockName,
+        stockCode,
         pagination:{
             lastPage,
             currentPage

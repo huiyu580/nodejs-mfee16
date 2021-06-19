@@ -21,6 +21,8 @@ app.use(function(req, res, next){
 let stockRouter = require('./routes/stock')
 // 告訴程式如果看到/stock 就到stock.js找
 app.use("/stock", stockRouter)
+let apiRouter = require('./routes/api')
+app.use("/api", apiRouter)
 
 app.use(express.static("public"));
 

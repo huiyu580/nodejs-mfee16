@@ -2,6 +2,13 @@ body{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
 }
 
+.container{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 table{
     margin: 10px 10px;
     border-collapse: collapse;
@@ -14,11 +21,36 @@ th{
     padding: 5px 5px;
     border: 1px solid #748f6e;
 }
-th:nth-child(1){
+th{
     border-right: 1px solid white;
+}
+th:last-child{
+    border-right: 1px solid #748f6e;
 }
 td{
     padding: 3px 5px;
     border: 1px solid lightgray;
 
+}
+
+a{
+    color: #748f6e;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border: 1px solid#748f6e;
+    text-align: center;
+    line-height: 30px;
+}
+a.active{
+    color: white;
+    background-color: #748f6e;
+}
+
+a.active:visited{
+    color: white;
+}
+
+a:visited{
+    color: #748f6e;
 }

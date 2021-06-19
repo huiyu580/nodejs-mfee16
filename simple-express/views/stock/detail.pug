@@ -1,17 +1,21 @@
 extends ../_layouts/master
 
 block content
-  table
-    tr
-      th 股票代碼
-      th 日期
-      th 開盤價
-      th 最高價
-      th 最低價
-    each price in stockPrice 
+  .container
+    table
       tr
-        td #{price.stock_id}
-        td #{price.date}
-        td #{price.open_price}
-        td #{price.high_price}
-        td #{price.low_price}
+        th 股票代碼
+        th 日期
+        th 開盤價
+        th 最高價
+        th 最低價
+      each price in stockPrice 
+        tr
+          td #{price.stock_id}
+          td #{price.date}
+          td #{price.open_price}
+          td #{price.high_price}
+          td #{price.low_price}
+    .pagination
+      - for(var p=1; p <= pagination.lastPage; p++)
+        a(href=`/stock/2379?page=${p}`, class=p==pagination.currentPage?"active":"")  #{p}

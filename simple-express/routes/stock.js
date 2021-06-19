@@ -10,10 +10,22 @@ router.get("/", async (req, res) => {
     })
 });
 router.get("/:stockCode", async (req, res) => {
+    const perPage = 10;
+    let totalCountArr = await db.queryAsync('SELECT COUNT(*) as total FROM stock_price WHERE stock_id = ?', [req.params.stockCode]); 
+    total = totalCountArr[0].total
+    let lastPage = Math.ceil(total/perPage)
+    const currentPage = req.query.page || 1;
+    
 
-    let priceResult = await db.queryAsync('SELECT * FROM stock_price WHERE stock_id = ? ORDER BY date', [req.params.stockCode]);
+    let priceResult = await db.queryAsync('SELECT * FROM stock_price WHERE stock_id = ? ORDER BY date  LIMIT ?,?', [req.params.stockCode, (currentPage-1)*perPage, perPage]);
+    console.log(priceResult)
     res.render("stock/detail",{
-        stockPrice : priceResult
+        stockPrice : priceResult,
+        pagination:{
+            lastPage,
+            currentPage,
+            
+        }
     })
 
 });

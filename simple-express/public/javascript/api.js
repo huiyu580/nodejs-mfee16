@@ -11,7 +11,16 @@
 //     console.log("completed")
 // })
 
-axios.get('/api/stocks')
-.then(function (response) {
-    console.log(response);
+// axios.get('/api/stocks')
+// .then(function (response) {
+//     console.log(response);
+// })
+
+fetch('/api/stocks')
+.then(function(data){
+    return data.json()
+    // console.log(data)
+})
+.then(function(jsonData){
+    console.log(jsonData)
 })

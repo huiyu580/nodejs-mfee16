@@ -129,6 +129,7 @@ router.post("/login", loginRules , async (req, res, next) => {
 
         res.send("登入成功")
     }else{
+        req.session.member = null;
         res.send("登入失敗")
 
     }

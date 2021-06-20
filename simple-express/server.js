@@ -7,6 +7,16 @@ let app = express();
 // 用db.js模組連線至資料庫
 let db = require("./utils/db.js");
 
+// 使用cookie去紀錄session id
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
+
+// 使用session
+const expressSession = require("express-session");
+app.use(expressSession({
+    secret: process.env.SESSION_SECRET,
+    saveUninitialized: false,
+  }))
 
 // module < package < framework
 
@@ -16,6 +26,9 @@ app.use(function(req, res, next){
     console.log(`訪問時間:${current}`);
     next();
 })
+
+// 使 express 可以透過 req.body 抓到post資料
+app.use(express.urlencoded({ extended: false }));
 
 // 通常把router application放在這
 let stockRouter = require('./routes/stock')
@@ -27,15 +40,25 @@ app.use("/api", apiRouter)
 let authRouter = require('./routes/auth')
 app.use("/auth", authRouter)
 
+let memberRouter = require('./routes/member')
+app.use("/member", memberRouter)
+
 // 這行會建立/javascripts/api.js 路由
 // style/style.css 路由
 app.use(express.static("public"));
+
+
 
 // 第一個是變數 第二個是檔案夾名稱
 app.set("views", "views")
 
 // 告訴express我們用view engine是pug
 app.set("view engine", "pug")
+
+app.use(function (req, res, next) {
+    res.locals.member = req.session.member;
+    next();
+});
 
 // 路由
 app.get("/", (req, res) => {
@@ -66,6 +89,7 @@ app.get("/test", (req, res) => {
     res.send("Express test")
 });
 
+
 app.use((req, res, next) => {
     res.status(404);
     res.render("404");
@@ -73,9 +97,9 @@ app.use((req, res, next) => {
 
 // 500 error 放在所有路由最後面 這裡一定要有四個參數 --> 最後的錯誤處理
 app.use((err, req, res, next) => {
-    console.log(err.message)
+    // console.log(err.message)
     res.status(500);
-    res.send("500 洽系統管理員")
+    res.send(err.message)
 })
 app.listen(3000, () => {
     console.log(`我跑起來了`)

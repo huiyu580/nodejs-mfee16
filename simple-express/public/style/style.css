@@ -83,7 +83,7 @@ td{
   input[type="submit"],
   button {
     width: 100%;
-    background-color: #4caf50;
+    background-color: #748f6e;
     color: white;
     padding: 14px 20px;
     margin: 8px 0;
@@ -94,7 +94,7 @@ td{
   
   input[type="submit"]:hover,
   button:hover {
-    background-color: #45a049;
+    background-color: #748f6e;
   }
   
   /* navigation */
@@ -103,7 +103,7 @@ td{
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #4caf50;
+    background-color: #748f6e;
     top: 0;
     width: 100%;
   }
@@ -121,5 +121,5 @@ td{
   }
   
   li a:hover {
-    background-color: #45a049;
+    background-color: #748f6e;
   }

@@ -24,6 +24,11 @@ app.use("/stock", stockRouter)
 let apiRouter = require('./routes/api')
 app.use("/api", apiRouter)
 
+let authRouter = require('./routes/auth')
+app.use("/auth", authRouter)
+
+// 這行會建立/javascripts/api.js 路由
+// style/style.css 路由
 app.use(express.static("public"));
 
 // 第一個是變數 第二個是檔案夾名稱
@@ -68,6 +73,7 @@ app.use((req, res, next) => {
 
 // 500 error 放在所有路由最後面 這裡一定要有四個參數 --> 最後的錯誤處理
 app.use((err, req, res, next) => {
+    console.log(err.message)
     res.status(500);
     res.send("500 洽系統管理員")
 })

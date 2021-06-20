@@ -13,7 +13,8 @@ router.get("/:stockCode", async (req, res, next) => {
     let stockArr = await db.queryAsync('SELECT * FROM stock WHERE stock_id = ?', [req.params.stockCode]); 
     // 看是否有這個名稱
     if (stockArr.length ==0){
-        next(); // 進入404那個中間件
+        return next(new Error("錯誤訊息跳入500")); // 進入404那個中間件 加上return避免繼續執行函式內下面的程式碼
+        // 如果再next(加入參數) 就會跳到有四個參數的錯誤處理函式
     }
     let stockName = stockArr[0].stock_name
     let stockCode = stockArr[0].stock_id

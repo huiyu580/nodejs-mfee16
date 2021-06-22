@@ -41,7 +41,8 @@ let authRouter = require('./routes/auth')
 app.use("/auth", authRouter)
 
 let memberRouter = require('./routes/member')
-app.use("/member", memberRouter)
+app.use("/member", memberRouter
+)
 
 // 這行會建立/javascripts/api.js 路由
 // style/style.css 路由
@@ -57,8 +58,17 @@ app.set("view engine", "pug")
 
 app.use(function (req, res, next) {
     res.locals.member = req.session.member;
+
     next();
 });
+
+app.use(function(req, res, next) {
+    if(req.session.message){
+        res.locals.message = req.session.message;
+        delete req.session.message;
+    }
+    next();
+})
 
 // 路由
 app.get("/", (req, res) => {

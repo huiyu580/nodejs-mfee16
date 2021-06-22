@@ -5,3 +5,5 @@ stock.txt
 nodejs.txt
 
 .env
+
+!uploads

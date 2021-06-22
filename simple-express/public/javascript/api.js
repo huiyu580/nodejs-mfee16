@@ -16,11 +16,12 @@
 //     console.log(response);
 // })
 
+
+
 fetch('/api/stocks')
-.then(function(data){
-    return data.json()
-    // console.log(data)
-})
-.then(function(jsonData){
-    console.log(jsonData)
-})
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(myJson) {
+    console.log(myJson);
+  });

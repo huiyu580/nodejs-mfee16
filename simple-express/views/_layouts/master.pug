@@ -7,7 +7,17 @@ html
     link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css')
     script(src="https://code.jquery.com/jquery-3.6.0.min.js")
     block scripts
+    if message
+      script(src="//cdn.jsdelivr.net/npm/sweetalert2@11")
   body
     include header
     block content
     include footer
+
+  if message
+    script.
+      Swal.fire({
+        icon: '#{message.icon}',
+        title: "#{message.title}",
+        text: "#{message.text}"
+      })

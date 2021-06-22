@@ -112,7 +112,12 @@ router.post("/login", loginRules , async (req, res, next) => {
     let member = await db.queryAsync('SELECT * FROM members WHERE email=?',[req.body.email])
 
     if(member.length == 0){
-        return next(new Error("帳號不存在")) 
+        req.session.message = {
+            title: "帳號不存在",
+            text: "請再次確認",
+            icon: "error"
+        }
+        res.redirect(303, "/")
     }
     member = member[0]
     console.log(member)
@@ -125,18 +130,31 @@ router.post("/login", loginRules , async (req, res, next) => {
             password: member.password,
             name: member.name
         };
+        req.session.message = {
+            title: "成功登入",
+            text: "歡迎回來",
+            icon: "success"
+        }
         res.redirect(303, "/")
 
-        res.send("登入成功")
     }else{
         req.session.member = null;
-        res.send("登入失敗")
-
+        req.session.message = {
+            title: "登入失敗",
+            text: "請輸入正確email及密碼",
+            icon: "error"
+        }
+        res.redirect(303, "/")
     }
 })
 
 router.get("/logout",(req, res) => {
     req.session.member = null;
+    req.session.message = {
+        title: "已登出",
+        text: "下次見！",
+        icon: "success"
+    }
     res.redirect(303, "/")
 })
 
